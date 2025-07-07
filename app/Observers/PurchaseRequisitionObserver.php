@@ -49,7 +49,7 @@ class PurchaseRequisitionObserver
 
         $recipient->notify(
             Notification::make()
-                ->title('Deleted successfully '. $purchaseRequisition->pr_number)
+                ->title('Deleted successfully ')
                 ->sendToDatabase($recipient, true)
                 ->toBroadcast(),
         );

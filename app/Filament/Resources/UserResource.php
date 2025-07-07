@@ -43,6 +43,10 @@ class UserResource extends Resource
                             ->required()
                             ->validationAttribute('email address')
                             ->maxLength(255),
+
+                        Forms\Components\Select::make('dealer_id')
+                        ->label('Dealer')
+                        ->relationship('dealer', 'name')
                     ]),
 
                 Forms\Components\Section::make('Account Security')
@@ -83,18 +87,23 @@ class UserResource extends Resource
                     ->circular()
                     ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name)),
                 TextColumn::make('name')->searchable()->toggleable(),
+                TextColumn::make('dealer.slug')->label('Dealer'),
                 TextColumn::make('roles.name')->listWithLineBreaks()->badge(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('email_verified_at')->label('Email Verified At')->date()->toggleable(),
                 TextColumn::make('created_at')->label('Created At')->sortable()->date()->toggleable(),
                 TextColumn::make('updated_at')->label('Updated At')->sortable()->date()->toggleable(),
             ])
+            ->groups([
+                'dealer.slug',
+            ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()->hidden(fn($record) => $record->id !== auth()->id()),
+                Tables\Actions\EditAction::make()
+                    ->hidden(auth()->user()->hasRole('super-admin')),
             ])
             ->bulkActions([
                 ExportBulkAction::make(),

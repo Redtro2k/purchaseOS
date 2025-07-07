@@ -32,4 +32,9 @@ class Item extends Model
             'requester_id'
         );
     }
+
+    public function dealer()
+    {
+        return $this->belongsTo(Dealer::class);
+    }
 }

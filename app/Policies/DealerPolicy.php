@@ -2,32 +2,36 @@
 
 namespace App\Policies;
 
-use App\Models\Dealer;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Dealer;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DealerPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('view_any_dealer');
+        return $user->can('view_any_dealer');
     }
+
     /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Dealer $dealer): bool
     {
-        return $user->hasPermissionTo('view_dealer');
+        return $user->can('view_dealer');
     }
+
     /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create_dealer');
+        return $user->can('create_dealer');
     }
 
     /**
@@ -35,7 +39,7 @@ class DealerPolicy
      */
     public function update(User $user, Dealer $dealer): bool
     {
-        return $user->hasPermissionTo('update_dealer');
+        return $user->can('update_dealer');
     }
 
     /**
@@ -43,30 +47,62 @@ class DealerPolicy
      */
     public function delete(User $user, Dealer $dealer): bool
     {
-        return $user->hasPermissionTo('delete_dealer');
+        return $user->can('delete_dealer');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
      */
-    public function restore(User $user, Dealer $dealer): bool
+    public function deleteAny(User $user): bool
     {
-        return $user->hasPermissionTo('restore_dealer');
+        return $user->can('delete_any_dealer');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can permanently delete.
      */
     public function forceDelete(User $user, Dealer $dealer): bool
     {
-        return $user->hasPermissionTo('force_delete_dealer');
+        return $user->can('force_delete_dealer');
     }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('force_delete_any_dealer');
+    }
+
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Dealer $dealer): bool
+    {
+        return $user->can('restore_dealer');
+    }
+
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
+    {
+        return $user->can('restore_any_dealer');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
     public function replicate(User $user, Dealer $dealer): bool
     {
-        return $user->hasPermissionTo('replicate_dealer');
+        return $user->can('replicate_dealer');
     }
+
+    /**
+     * Determine whether the user can reorder.
+     */
     public function reorder(User $user): bool
     {
-        return $user->hasPermissionTo('reorder_dealer');
+        return $user->can('reorder_dealer');
     }
 }

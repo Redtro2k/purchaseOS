@@ -13,10 +13,14 @@ class UserObserver
     public function created(User $user): void
     {
         //
-        Notification::make()
-            ->title('Create Successfully '.$user->name)
-            ->sendToDatabase($user)
-            ->broadcast($user);
+        $recipient = auth()->user();
+
+        $recipient->notify(
+            Notification::make()
+                ->title('Updated successfully '. $user->name)
+                ->sendToDatabase($recipient)
+                ->toBroadcast(),
+        );
     }
 
     /**
@@ -30,7 +34,7 @@ class UserObserver
         $recipient->notify(
             Notification::make()
                 ->title('Updated successfully '. $user->name)
-                ->sendToDatabase($user)
+                ->sendToDatabase($recipient)
                 ->toBroadcast(),
         );
     }
@@ -46,7 +50,7 @@ class UserObserver
         $recipient->notify(
             Notification::make()
                 ->title('Deleted successfully '. $user->name)
-                ->sendToDatabase($user)
+                ->sendToDatabase($recipient)
                 ->toBroadcast(),
         );
     }

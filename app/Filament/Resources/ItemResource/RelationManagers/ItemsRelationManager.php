@@ -50,6 +50,9 @@ class ItemsRelationManager extends RelationManager
                     })
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('dealer_id')
+                    ->relationship('dealer', 'slug')
+                    ->required(),
                 Forms\Components\Radio::make('status')
                     ->options([
                         'approved' => 'Approved',
@@ -57,7 +60,8 @@ class ItemsRelationManager extends RelationManager
                         'completed' => 'Completed',
                     ])
                     ->inline()
-                    ->inlineLabel(false),
+                    ->inlineLabel(false)
+                    ->required(),
                 Forms\Components\TextInput::make('net_price')
                     ->required()
                     ->maxLength(255),

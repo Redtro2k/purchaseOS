@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
@@ -34,9 +35,8 @@ class PurchaseRequisitionResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('requester_id')
                             ->label('Requested By')
-                            ->relationship(
-                                name: 'requester',
-                                titleAttribute: 'name',
+                            ->relationship('requester',
+                                'name',
                                 modifyQueryUsing: fn ($query) => $query->when(
                                     !auth()->user()->hasRole('super_admin'),
                                     fn ($query) => $query->whereHas('roles', fn ($q) =>
@@ -54,6 +54,9 @@ class PurchaseRequisitionResource extends Resource
                         Forms\Components\Select::make('dealer_id')
                             ->label('Dealer')
                             ->relationship('dealer', 'slug')
+                            ->disabled(fn () => auth()->user()->hasRole('member'))
+                            ->dehydrated(fn () => auth()->user()->hasRole('member'))
+                            ->default(auth()->user()->dealer_id)
                             ->required(),
                         Forms\Components\DatePicker::make('prepared_dt')
                             ->label('Prepared Date')
@@ -206,6 +209,9 @@ class PurchaseRequisitionResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->groups([
+                Group::make('pr_number'),
             ])
             ->modifyQueryUsing(function($query){
                 if(auth()->user()->hasAnyRole('manager', 'supervisor')){

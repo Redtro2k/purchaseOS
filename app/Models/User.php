@@ -71,4 +71,8 @@ class User extends Authenticatable implements HasAvatar
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+    public function dealer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Dealer::class);
+    }
 }

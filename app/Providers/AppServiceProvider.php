@@ -2,17 +2,22 @@
 
 namespace App\Providers;
 
+
+use App\Http\Reponses\LogoutResponse;
+use Filament\Http\Responses\Auth\Contracts\LoginResponse;
+use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
+       $this->app->singleton(LoginResponse::class, \App\Http\Responses\LoginResponse::class);
+        $this->app->bind(LogoutResponseContract::class, LogoutResponse::class);
+
     }
 
     /**

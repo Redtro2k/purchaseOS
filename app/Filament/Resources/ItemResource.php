@@ -36,6 +36,9 @@ class ItemResource extends Resource
                 Forms\Components\TextInput::make('budget_code')
                     ->placeholder('Budget Code')
                     ->numeric(),
+                Forms\Components\Select::make('dealer_id')
+                    ->placeholder('Budget Code')
+                    ->required(),
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
@@ -43,6 +46,7 @@ class ItemResource extends Resource
                     ->disableToolbarButtons([
                         'attachFiles'
                     ])
+                    ->placeholder('No Description')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('quantity')
                     ->required()
